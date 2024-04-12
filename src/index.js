@@ -1,19 +1,14 @@
-const parseQuery = require('./queryParser');
-const readCSV = require('./csvReader');
+const { readCSV, writeCSV } = require('./csvReader');
+const { parseSelectQuery, parseInsertQuery, parseDeleteQuery } = require('./queryParser');
+const { executeSELECTQuery, executeINSERTQuery, executeDELETEQuery } = require('./queryExecutor');
 
-async function executeSELECTQuery(query) {
-    const { fields, table } = parseQuery(query);
-    const data = await readCSV(`${table}.csv`);
-    
-    // Filter the fields based on the query
-    return data.map(row => {
-        const filteredRow = {};
-        fields.forEach(field => {
-            filteredRow[field] = row[field];
-        });
-        return filteredRow;
-    });
+module.exports = {
+    readCSV,
+    writeCSV,
+    executeSELECTQuery,
+    executeINSERTQuery,
+    executeDELETEQuery,
+    parseSelectQuery,
+    parseInsertQuery,
+    parseDeleteQuery
 }
-
-module.exports = executeSELECTQuery;
-
